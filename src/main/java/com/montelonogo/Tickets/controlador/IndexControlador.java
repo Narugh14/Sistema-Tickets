@@ -15,6 +15,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.scene.control.*;
 
+import javax.swing.*;
+
 @Component
 public class IndexControlador implements Initializable {
 
@@ -39,6 +41,14 @@ public class IndexControlador implements Initializable {
     private final ObservableList<ticket> ticketList =
             FXCollections.observableArrayList();
 
+    @FXML
+    private TextField nombreTicketTexto;
+    @FXML
+    private TextField responsableTexto;
+    @FXML
+    private TextField estatusTexto;
+
+    private Integer idTicketSelect;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -60,5 +70,99 @@ public class IndexControlador implements Initializable {
         ticketColumna.setCellValueFactory(new PropertyValueFactory<>("actividadTicket"));
         responsableColumna.setCellValueFactory(new PropertyValueFactory<>("resposableTicket"));
         estatusColumna.setCellValueFactory(new PropertyValueFactory<>("estatus"));
+    }
+
+    public void agregarTicket(){
+
+        if(idTicketSelect != null){
+            mostrarMensaje("Error Validacion","Ticket duplicado");
+            return;
+        }
+        if(nombreTicketTexto.getText().isEmpty()){
+            mostrarMensaje("Error validacion", "Rellenar los campos vacios");
+            nombreTicketTexto.requestFocus();
+            return;
+        } else if (estatusTexto.getText().isEmpty()) {
+            mostrarMensaje("Error validacion", "Rellenar los campos vacios");
+            responsableTexto.requestFocus();
+            return;
+        } else if (responsableTexto.getText().isEmpty()) {
+            mostrarMensaje("Error validacion", "Rellenar los campos vacios");
+            estatusTexto.requestFocus();
+            return;
+        }else {
+            var ticket = new ticket();
+            GuardarDatos(ticket);
+            ticket.setIdTicket(null);
+            ticketServicio.agregarTicket(ticket);
+            mostrarMensaje("Informacion","Ticket Guardado");
+            resetFormulario();
+            listarTickets();
+        }
+    }
+
+    public void modificarTicket(){
+        if(idTicketSelect == null){
+            mostrarMensaje("Informacion", "Seleccionar ticket de la lista");
+            return;
+        }
+        if(nombreTicketTexto.getText().isEmpty()){
+            mostrarMensaje("Error Validacion", "Debe proporcionar un ticket");
+            nombreTicketTexto.requestFocus();
+            return;
+        }
+        var ticket = new ticket();
+        GuardarDatos(ticket);
+        ticketServicio.agregarTicket(ticket);
+        mostrarMensaje("Informacion","ticket Modificado correctamente");
+        resetFormulario();
+        listarTickets();
+    }
+
+    public void eliminarTicket(){
+        var ticket = ticketTabla.getSelectionModel().getSelectedItem();
+        if( ticket != null && !nombreTicketTexto.getText().isEmpty()){
+            logger.info("Registro a eliminar: " + ticket.getIdTicket());
+            ticketServicio.eliminarTicket(ticket);
+            mostrarMensaje("Informacion", "Tarea eliminada: " + ticket.getActividadTicket());
+            resetFormulario();
+            listarTickets();
+        }else{
+            mostrarMensaje("Error", "No se a seleccionado ningun ticket");
+        }
+    }
+
+    public void selectTicketList(){
+        var ticket = ticketTabla.getSelectionModel().getSelectedItem();
+        if(ticket != null){
+            idTicketSelect = ticket.getIdTicket();
+            nombreTicketTexto.setText(ticket.getActividadTicket());
+            responsableTexto.setText(ticket.getResposableTicket());
+            estatusTexto.setText(ticket.getEstatus());
+        }
+    }
+
+    public void resetFormulario(){
+         idTicketSelect = null;
+        nombreTicketTexto.clear();
+        estatusTexto.clear();
+        responsableTexto.clear();
+    }
+
+    private void GuardarDatos(ticket ticket) {
+        if(idTicketSelect != null)
+            ticket.setIdTicket(idTicketSelect);
+        ticket.setActividadTicket(nombreTicketTexto.getText());
+        ticket.setResposableTicket(responsableTexto.getText());
+        ticket.setEstatus(estatusTexto.getText());
+    }
+
+    private void mostrarMensaje(String titulo, String mensaje) {
+
+        Alert aviso = new Alert(Alert.AlertType.INFORMATION);
+        aviso.setTitle(titulo);
+        aviso.setHeaderText(null);
+        aviso.setContentText(mensaje);
+        aviso.showAndWait();
     }
 }

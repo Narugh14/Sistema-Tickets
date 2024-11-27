@@ -14,7 +14,7 @@
          <font>
             <Font size="24.0" />
          </font></Label>
-      <TableView fx:id="ticketTabla" layoutX="353.0" layoutY="86.0" prefHeight="330.0" prefWidth="428.0">
+      <TableView fx:id="ticketTabla" layoutX="353.0" layoutY="86.0" onMouseClicked="#selectTicketList" prefHeight="330.0" prefWidth="428.0">
         <columns>
           <TableColumn fx:id="idTicketColumna" prefWidth="37.60003662109375" text="ID" />
           <TableColumn fx:id="ticketColumna" prefWidth="140.80007934570312" text="Ticket" />
@@ -34,10 +34,10 @@
       </AnchorPane>
       <AnchorPane layoutX="14.0" layoutY="301.0" prefHeight="111.0" prefWidth="332.0">
          <children>
-            <Button layoutX="14.0" layoutY="20.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="139.0" text="Agregar" />
-            <Button layoutX="170.0" layoutY="20.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="127.0" text="Modificar" />
-            <Button layoutX="14.0" layoutY="61.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="139.0" text="Eliminar" />
-            <Button layoutX="170.0" layoutY="61.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="127.0" text="Limpiar registro" />
+            <Button fx:id="agregarBoton" layoutX="14.0" layoutY="20.0" mnemonicParsing="false" onAction="#agregarTicket" prefHeight="35.0" prefWidth="139.0" text="Agregar" />
+            <Button fx:id="modificarBoton" layoutX="170.0" layoutY="20.0" mnemonicParsing="false" onAction="#modificarTicket" prefHeight="35.0" prefWidth="127.0" text="Modificar" />
+            <Button fx:id="eliminarBoton" layoutX="14.0" layoutY="61.0" mnemonicParsing="false" onAction="#eliminarTicket" prefHeight="35.0" prefWidth="139.0" text="Eliminar" />
+            <Button fx:id="resetBoton" layoutX="170.0" layoutY="61.0" mnemonicParsing="false" onAction="#resetFormulario" prefHeight="35.0" prefWidth="127.0" text="Limpiar registro" />
          </children>
       </AnchorPane>
    </children>
